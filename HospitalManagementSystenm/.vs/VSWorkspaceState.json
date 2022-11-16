@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\app",
+    "\\src\\app\\Models",
+    "\\src\\app\\patient",
+    "\\src\\app\\patient\\patient-list",
+    "\\src\\app\\services"
+  ],
+  "SelectedNode": "\\src\\app\\patient\\patient-list\\patient-list.component.ts",
+  "PreviewInSolutionExplorer": false
+}

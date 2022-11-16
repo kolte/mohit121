@@ -1,0 +1,203 @@
+<button (click)="addPatient();">Add Patient</button>
+<table class="table align-middle mb-0 bg-white">
+  <thead class="bg-light">
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>Age</th>
+      <th>Sex</th>
+      <th>CheckIn</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let i of patientList; let j=index;">
+      <td>{{j+1}}</td>
+      <td>{{i.Name}}</td>
+      <td>{{i.Age}}</td>
+      <td>{{i.Sex}}</td>
+      <td>{{i.CheckIn}}</td>
+      <td><i (click)="open(i.Id)" class="bi bi-info-square-fill"></i><i (click)="edit(i.Id)" class="bi bi-pencil-square"></i><i (click)="deleteModal(i.Id);" class="bi bi-trash"></i><i (click)="openHistory(i.Id)" class="bi bi-person-square"></i></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+
+
+<!--<button class="btn btn-lg btn-outline-primary" (click)="open(mymodal)">Open My Modal</button>-->
+
+
+
+<ng-template #mymodalopen let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Patient Details</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <span>Patient Id : {{ModalData.Id}}</span>
+  <div class="modal-body">
+    <table>
+      <tr>
+        <td>Name : </td>
+        <td>{{ModalData.Name}}</td>
+      </tr>
+      <tr>
+        <td>Age : </td>
+        <td>{{ModalData.Age}}</td>
+      </tr>
+      <tr>
+        <td>Sex : </td>
+        <td>{{ModalData.Sex}}</td>
+      </tr>
+      <tr>
+        <td>CheckIn : </td>
+        <td>{{ModalData.CheckIn}}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Ok</button>
+  </div>
+</ng-template>
+
+
+
+<ng-template #mymodalDelete let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Delete Patient</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <span>Patient Id : <b>{{patientId}}</b></span>
+  <br />
+  <div class="modal-body">
+    <h5>Do You really want to <b>Delete</b> this patient!!</h5>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Yes</button>
+  </div>
+</ng-template>
+
+
+
+
+<ng-template #mymodalAdd let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Add Patient</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+
+      <div>
+        <label>Name : </label>
+        <input type="text" class="form-control" id="name" formControlName="name" [(ngModel)]="model.Name">
+      </div>
+      <div>
+        <label>Age : </label>
+        <input type="number" class="form-control" id="name" formControlName="age" [(ngModel)]="model.Age">
+      </div>
+      <div class="radio">
+        <label>
+          <label>Male</label><input type="radio" value="Male" formControlName="sex" [(ngModel)]="model.Sex"><br />
+          <label>FeMale</label><input type="radio" value="Female" formControlName="sex" [(ngModel)]="model.Sex">
+        </label>
+      </div>
+      <div>
+        <label>Check In : </label>
+        <div class="input-group">
+          <input class="form-control" placeholder="yyyy-mm-dd" formControlName="checkin" name="dp" [(ngModel)]="model.CheckIn" ngbDatepicker #d="ngbDatepicker">
+
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"> Calander</button>
+
+          </div>
+
+        </div>
+      </div>
+
+
+
+
+      <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
+
+
+  </div>
+
+  <!--<div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Yes</button>
+  </div>-->
+</ng-template>
+
+
+
+
+<ng-template #mymodalAddHistory let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">History Details</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <label>Patient Id: {{pmodel.PatientHistoryId}}</label>
+    <form [formGroup]="PatientHistoryForm" (ngSubmit)="PatientHistoryAdd()">
+
+      <div class="row">
+        <div class="col-sm-3">
+          <label>Height(cm) : </label>
+          <input type="number" class="form-control" id="ht" formControlName="height" [(ngModel)]="pmodel.Height">
+        </div>
+        <div class="col-sm-3">
+          <label>Weight(kg) : </label>
+          <input type="number" class="form-control" id="wt" formControlName="weight" [(ngModel)]="pmodel.Weight">
+        </div>
+        <div class="col-sm-3">
+          <label></label>
+        </div>
+        </div>
+        <div class="row">
+          <label><b>Smoking : </b></label>
+
+          <div class="col-sm-4">
+            <label>Heavy Smoker</label><input type="radio" value="heavysmoker" formControlName="smoking" [(ngModel)]="pmodel.Smoking">
+          </div>
+          <div class="col-sm-4">
+            <label>Modrate Smoker</label><input type="radio" value="modratesmoker" formControlName="smoking" [(ngModel)]="pmodel.Smoking">
+          </div>
+
+        </div>
+        <div class="row">
+          <label><b>Alcohol Drinking : </b></label>
+
+          <div class="col-sm-4">
+            <label>Heavy Drinker</label><input type="radio" value="heavydrinker" formControlName="alcohol" [(ngModel)]="pmodel.Alcohol">
+          </div>
+          <div class="col-sm-4">
+            <label>Modrate Drinker</label><input type="radio" value="modratedrinker" formControlName="alcohol" [(ngModel)]="pmodel.Alcohol">
+          </div>
+        </div>
+
+        <button class="btn btn-primary" type="submit">Submit</button>
+</form>
+
+
+  </div>
+
+  <!--<div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Yes</button>
+  </div>-->
+</ng-template>
+
+
+
+
